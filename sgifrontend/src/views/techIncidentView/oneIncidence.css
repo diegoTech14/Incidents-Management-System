@@ -1,0 +1,29 @@
+
+#icon-incidence{
+    color:rgb(50, 50, 50);
+    font-size:22px;
+}
+
+#bar{
+ font-size: 16px;
+ opacity: 85%;   
+ height: 90px;
+
+}
+
+#icon-bar{
+    padding-top:10px;
+    font-size:40px;
+}
+
+#large-bar{
+    font-size: 18px;
+    opacity: 85%;   
+    height: 90px;
+}
+
+#large-bar #icon-bar{
+    padding-top:10px;
+    font-size:45px;
+    color:white;
+}

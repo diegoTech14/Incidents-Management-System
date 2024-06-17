@@ -1,0 +1,9 @@
+/* For information on how to create your own theme, please see:
+http://ionicframework.com/docs/theming/ */
+body{
+    background-color: #fff;
+}
+
+#navbar{
+    --background:blue;
+}

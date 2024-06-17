@@ -1,0 +1,168 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model T_Imagenes {
+  idImagen   Int     @id @unique @default(autoincrement()) @map("cn_id_imagen")
+  rutaImagen String  @map("ct_ruta_imagen")
+  tipoImagen Boolean @map("cb_tipo_imagen")
+
+  idIncidencia String        @map("cn_id_incidencia")
+  incidencia   T_Incidencias @relation(fields: [idIncidencia], references: [codigoIncidencia])
+}
+
+model T_Roles {
+  idRol            Int                @id @unique @default(autoincrement()) @map("cn_id_rol")
+  descripcion      String             @map("ct_Descripcion")
+  sistema          String             @map("ct_Sistema")
+  estado           Boolean            @map("cb_estado")
+  usuarios         T_usuarios[]       @relation("T_Usuarios_x_Rol")
+  T_Usuarios_x_Rol T_Usuarios_x_Rol[]
+}
+
+model T_usuarios {
+  cedula       String  @id @map("ct_cedula")
+  nombre       String  @map("ct_nombre")
+  apellidoUno  String  @map("ct_apellido_uno")
+  apellidoDos  String  @map("ct_apellido_dos")
+  telefono     Int?    @map("cn_telefono")
+  correo       String  @map("ct_correo")
+  puesto       String  @map("ct_puesto")
+  departamento Int     @map("ct_departamento")
+  estado       Boolean @map("cb_estado")
+  contrasena   String  @map("ct_contrasena")
+
+  incidencias              T_Incidencias[]
+  roles                    T_Roles[]                  @relation("T_Usuarios_x_Rol")
+  T_Usuarios_x_Rol         T_Usuarios_x_Rol[]
+  diagnostico              T_Diagnostico[]
+  usuario                  T_Usuario_X_Incidencia[]
+  T_Bitacora_Cambio_Estado T_Bitacora_Cambio_Estado[]
+}
+
+model T_Usuario_X_Incidencia {
+  codigoAsignacion     Int    @id @unique @default(autoincrement()) @map("cn_codigo_asignacion")
+  idUsuario    String @map("ct_cedula_usuario") @db.VarChar(11)
+  idIncidencia String @map("ct_codigo_incidencia") @db.VarChar(12)
+
+  usuario     T_usuarios    @relation(fields: [idUsuario], references: [cedula])
+  incidencia T_Incidencias @relation(fields: [idIncidencia], references: [codigoIncidencia])
+
+  fechaAsignacion DateTime @map("cf_fecha_asignacion")
+}
+
+model T_Pantallas {
+  codigoPantalla      Int    @id @unique @default(autoincrement()) @map("cn_codigo_pantalla")
+  nombrePantalla      String @map("ct_nombre_pantalla")
+  descripcionPantalla String @map("ct_descripcion_pantalla")
+}
+
+model T_Bitacora_Cambio_Estado {
+  codigoBitacora   Int           @id @unique @default(autoincrement()) @map("cn_codig_bitacora")
+  idIncidencia     String        @map("ct_codigo_incidencia") @db.VarChar(8)
+  incidencias      T_Incidencias @relation(fields: [idIncidencia], references: [codigoIncidencia])
+  fechaCambio      DateTime      @map("cf_fecha_cambio")
+  idEstadoActual   Int           @map("cn_estado_actual")
+  idEstadoAnterior Int           @map("cn_estado_anterior")
+  idUsuario        String        @map("ct_cedula_usuario") @db.VarChar(11)
+  usuario          T_usuarios    @relation(fields: [idUsuario], references: [cedula])
+}
+
+model T_Usuarios_x_Rol {
+  userId   String     @map("ct_cedula")
+  roleId   Int        @map("cn_id_rol")
+  usuarios T_usuarios @relation(fields: [userId], references: [cedula], onDelete: Cascade)
+  roles    T_Roles    @relation(fields: [roleId], references: [idRol], onDelete: Cascade)
+
+  @@id([userId, roleId])
+  @@map("t_usuarios_x_rol")
+}
+
+model T_Afectaciones {
+  id          Int             @id @unique @default(autoincrement()) @map("cn_id_afectacion")
+  descripcion String          @map("ct_descripcion")
+  incidencias T_Incidencias[]
+}
+
+model T_Categorias {
+  id          Int             @id @unique @default(autoincrement()) @map("cn_id_categoria")
+  descripcion String          @map("ct_descripcion")
+  incidencias T_Incidencias[]
+}
+
+model T_Estados {
+  id          Int             @id @unique @default(autoincrement()) @map("cn_id_estado")
+  descripcion String          @map("ct_descripcion")
+  incidencias T_Incidencias[]
+}
+
+model T_Riesgos {
+  id          Int             @id @unique @default(autoincrement()) @map("cn_id_riesgo")
+  descripcion String          @map("ct_descripcion")
+  incidencias T_Incidencias[]
+}
+
+model T_Prioridades {
+  id          Int             @id @unique @default(autoincrement()) @map("cn_id_prioridad")
+  descripcion String          @map("ct_descripcion")
+  incidencias T_Incidencias[]
+}
+
+model T_Incidencias {
+  codigoIncidencia    String   @id @unique @map("ct_codigo_incidencia") @db.VarChar(11)
+  nombre              String   @map("ct_nombre")
+  descripcion         String   @map("ct_descripcion")
+  justificacionCierre String   @map("ct_justificacion_cierre")
+  lugarIncidencia     String   @map("ct_lugar_incidencia")
+  fechaRegistro       DateTime @map("cf_fecha_registro")
+  costo               Float    @map("cd_costo")
+  duracionGestion     Int      @map("cn_duracion_gestion")
+
+  idUsuario String     @map("cn_id_usuario") @db.VarChar(11)
+  Usuario   T_usuarios @relation(fields: [idUsuario], references: [cedula])
+
+  idAfectacion Int            @map("cn_id_afectacion") @db.Int
+  Afectacion   T_Afectaciones @relation(fields: [idAfectacion], references: [id])
+
+  idRiesgo Int       @map("cn_id_riesgo") @db.Int
+  Riesgo   T_Riesgos @relation(fields: [idRiesgo], references: [id])
+
+  idCategoria Int          @map("cn_id_categoria") @db.Int
+  Categoria   T_Categorias @relation(fields: [idCategoria], references: [id])
+
+  idPrioridad Int           @map("cn_id_prioridad") @db.Int
+  Prioridad   T_Prioridades @relation(fields: [idPrioridad], references: [id])
+
+  idEstado Int       @map("cn_id_estado") @db.Int
+  Estado   T_Estados @relation(fields: [idEstado], references: [id])
+
+  imagenes                 T_Imagenes[]
+  diagnostico              T_Diagnostico[]
+  incidencia              T_Usuario_X_Incidencia[]
+  T_Bitacora_Cambio_Estado T_Bitacora_Cambio_Estado[]
+}
+
+model T_Diagnostico {
+  codigoDiagnostico Int        @id @unique @default(autoincrement()) @map("cn_id_diagnostico")
+  fechaDiagnostico  DateTime   @map("cf_fecha_diagnostico")
+  diagnostico       String     @map("ct_diagnostico")
+  tiempoEstimado    Int        @map("cn_tiempo_estimado")
+  observacion       String     @map("ct_observacion")
+  compra            Boolean    @map("cb_compra")
+  idUsuario         String     @map("cn_id_usuario") @db.VarChar(11)
+  Usuario           T_usuarios @relation(fields: [idUsuario], references: [cedula])
+
+  idIncidencia String        @map("ct_codigo_incidencia") @db.VarChar(11)
+  Incidencia   T_Incidencias @relation(fields: [idIncidencia], references: [codigoIncidencia])
+}
