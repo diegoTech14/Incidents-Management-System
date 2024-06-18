@@ -25,12 +25,12 @@ import { IncidentsService } from "../services/incidentsService.js";
 
         saveImageCreated = async(req, res) => {
             const saveImage = await this.service.saveCreatedImages(req);
-            return (saveImage) ? this.#response = res.status(200).json(saveImage) : this.#response = res.status(200).json([])
+            return (saveImage) ? this.#response = res.status(200).json(saveImage) : this.#response = res.status(500).json([])
         }
 
         saveImageDiagnose = async(req, res) => {
             const diagnoseImage = await this.service.saveDiagnoseImages(req);
-            return (diagnoseImage) ? this.#response = res.status(200).json(diagnoseImage) : this.#response = res.status(200).json([])
+            return (diagnoseImage) ? this.#response = res.status(200).json(diagnoseImage) : this.#response = res.status(500).json([])
         }
         
         getIncidence = async(req, res) => {
@@ -41,5 +41,16 @@ import { IncidentsService } from "../services/incidentsService.js";
         assignIncidence = async(req, res) => {
             const assigned = await this.service.setIncidenceToTechnician(req);
             return (assigned) ? this.#response = res.status(200).json(assigned) : this.#response = res.status(500).json([])    
+        }
+
+        getAllIncidences = async(req, res) => {
+            const incidences = await this.service.getAllIncidences(req);
+            console.log(incidences)
+            return (incidences) ? this.#response = res.status(200).json(incidences) : this.#response = res.status(200).json([])    
+        }
+
+        updateCategories = async(req, res) => {
+            const updatedCategories = await this.service.updateCategoriesIncidente(req);
+            return (updatedCategories) ? this.#response = res.status(200).json(updatedCategories) : this.#response = res.status(500).json([])
         }
     }

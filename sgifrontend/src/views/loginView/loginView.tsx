@@ -27,7 +27,7 @@ return (
         header="No autorizado"
         subHeader="Correo o contraseña inválidos"
         message="Por favor intentelo de nuevo..."
-        buttons={['Action']}
+        buttons={['Aceptar']}
         onDidDismiss={() => setIsOpen(false)}
     ></IonAlert>
 

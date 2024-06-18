@@ -23,9 +23,11 @@ routerIncidents.post('/incidents/diagnose',controller.createDiagnose,
 routerIncidents.post('/incidents/assign', controller.assignIncidence)
 routerIncidents.post('/incidents/images', upload.single('file'), controller.saveImageCreated);
 routerIncidents.post('/incidents/images/diagnose', upload.single('file'), controller.saveImageDiagnose);
+routerIncidents.patch('/incidents/updateCategorie/:codigoIncidencia', controller.updateCategories)
 
 //get routes
-routerIncidents.get('/incidents/all', controller.getIncidences);
+routerIncidents.get('/incidents/byUser', controller.getIncidences);
 routerIncidents.get('/incidents/one', controller.getIncidence);
+routerIncidents.get('/incidents/all', controller.getAllIncidences);
 
 export default routerIncidents;

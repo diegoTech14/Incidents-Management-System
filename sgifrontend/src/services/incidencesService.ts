@@ -2,7 +2,7 @@ import axios from "axios";
 export class IncidencesService {
     public async getIncidences(userDNI:string){
         try{
-            const response = await axios.get(`http://localhost:3000/api/incidents/all?idUsuario=${userDNI}`);
+            const response = await axios.get(`http://localhost:3000/api/incidents/byUser?idUsuario=${userDNI}`);
             return response.data;
 
         }catch(error:any){

@@ -86,6 +86,45 @@ export class IncidentsService {
         }
     }
 
+    async getAllIncidences(req) {
+        try {
+            let incidences = {};
+
+            if (req.query.rol == 2) {
+                incidences = await prisma.t_Incidencias.findMany(
+                    {
+                        where: {
+                            idEstado: {
+                                not: 10
+                            }
+                        },
+                        select: {
+                            codigoIncidencia: true,
+                            nombre: true,
+                            Estado: true
+                        },
+
+                    }
+                );
+            } else if (req.query.rol == 3) {
+                incidences = await prisma.t_Incidencias.findMany(
+                    {
+                        select: {
+                            codigoIncidencia: true,
+                            nombre: true,
+                            Estado: true
+                        },
+                    }
+                );
+                console.log(incidences)
+            }
+
+            return incidences;
+        } catch (error) {
+            this.#response = false;
+        }
+    }
+
     async saveCreatedImages(req) {
         const lastId = await this.#generateIncidentCode();
         try {
@@ -132,9 +171,9 @@ export class IncidentsService {
             console.log(req.body.idIncidencia)
             await prisma.t_Usuario_X_Incidencia.create(
                 {
-                    data:{
+                    data: {
                         ...req.body,
-                        fechaAsignacion:new Date().toISOString()
+                        fechaAsignacion: new Date().toISOString()
                     }
                 }
             )
@@ -173,9 +212,28 @@ export class IncidentsService {
             );
             return incidence;
         } catch (error) {
-            this.#response = false;
+            return this.#response = false;
         }
     }
 
+    async updateCategoriesIncidente(req){
+
+        try{
+            const updatedIncident = await prisma.t_Incidencias.update({
+                where:{
+                    codigoIncidencia:req.params.codigoIncidencia
+                },
+                data:{
+                    idEstado:req.body.idEstado,
+                    idAfectacion:req.body.idAfectacion,
+                    idRiesgo:req.body.idRiesgo,
+                    idPrioridad:req.body.idPrioridad,
+                }
+            })
+            return updatedIncident;
+        }catch(error){
+            return this.#response = false;
+        }
+    }
 
 }
