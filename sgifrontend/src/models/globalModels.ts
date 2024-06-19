@@ -4,4 +4,5 @@ export interface returnValue{
 
 export interface modalAssing {
     setOpenModal:React.Dispatch<React.SetStateAction<boolean>>;
+    signal:number
 }

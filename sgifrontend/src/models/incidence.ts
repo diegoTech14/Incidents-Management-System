@@ -13,7 +13,7 @@ export interface Incidence {
 	idRiesgo:number
 }
 
-export interface IndividualIncidence { 
+export interface IndividualIncidence {
     codigoIncidencia:string,
     nombre: string,
     Estado: {

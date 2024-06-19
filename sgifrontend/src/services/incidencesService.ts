@@ -27,5 +27,19 @@ export class IncidencesService {
         }
     }
 
+    //get incidences for charge role
+    public async getIncidenceChargeRol(rol: number){
+        try{
+            const response = await axios.get(`http://localhost:3000/api/incidents/all?rol=${rol}`);
+            return response.data;
+        }catch(error:any){
+            if(axios.isAxiosError(error)){
+                throw new Error(error.response?.data?.error || "Error while login")
+            }else{
+                throw new Error("Server error")
+            }
+        }
+    }
+
 
 }

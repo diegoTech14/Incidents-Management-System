@@ -23,7 +23,9 @@ import {
     IonButtons,
     IonHeader,
     IonToolbar,
-    IonTitle
+    IonTitle,
+    IonSelect,
+    IonSelectOption
 } from '@ionic/react';
 import { useEffect } from 'react';
 import { AssingIncidentViewModel } from '../../viewModels/assingViewModel';
@@ -41,17 +43,6 @@ import { FaFire } from "react-icons/fa";
 
 import '../usersAssing.css';
 const ChargeView: React.FC = () => {
-    const {
-        images,
-        openCamera,
-        formData,
-        isOpen,
-        handleCreate,
-        setIsOpen,
-        handleInputChange,
-        setIsOpenTextError,
-        isOpenTextError
-    } = RegistIncidentViewModel();
 
     const {
         formDataAssing,
@@ -59,7 +50,10 @@ const ChargeView: React.FC = () => {
         handleAssing,
         setIsOpenAssing,
         setIsOpenTextErrorAssing,
-        isOpenTextErrorAssing
+        isOpenTextErrorAssing,
+        formDataCategories,
+        setFormDataCategories,
+        handleInputChange,
     } = AssingIncidentViewModel();
 
     const {
@@ -82,22 +76,6 @@ const ChargeView: React.FC = () => {
         <IonContent fullscreen>
 
             <div id="containerAll">
-                <IonAlert
-                    isOpen={isOpen}
-                    header="¡Error!"
-                    subHeader="Error durante el registro"
-                    message="Intentelo de nuevo por favor..."
-                    buttons={['Action']}
-                    onDidDismiss={() => setIsOpen(false)}
-                ></IonAlert>
-                <IonToast
-                    isOpen={isOpenTextError}
-                    onDidDismiss={() => setIsOpenTextError(false)}
-                    message="Algunos caracteres especiales no son permitidos"
-                    duration={3000}
-                    icon={closeCircleOutline}
-                    id="ion-toast-text"
-                ></IonToast>
 
                 <IonAlert
                     header="¿Seguro que desea asignar la incidencia?"
@@ -119,71 +97,14 @@ const ChargeView: React.FC = () => {
                     ]}
                 ></IonAlert>
 
-                <div className='d-flex row justify-content-center mt-2 rounded m-1'>
-                    <IonCard id="registCard" >
-                        <IonCardHeader>
-                            <IonCardTitle className='text-start fw-bold'>Registro de incidencias</IonCardTitle>
-                            <IonCardSubtitle><hr /></IonCardSubtitle>
-                        </IonCardHeader>
-
-                        <IonCardContent>
-                            <div className='d-flex'>
-                                <div className='w-100'>
-                                    <form onSubmit={handleCreate}>
-                                        <IonInput
-                                            type='text'
-                                            required
-                                            className="text-start mb-2"
-                                            label="Nombre" labelPlacement="floating"
-                                            fill="outline"
-                                            onIonInput={handleInputChange}
-                                            name="nombre"
-                                            value={formData.nombre}
-                                        ></IonInput>
-                                        <IonInput
-                                            className="text-start mb-2"
-                                            label="Lugar"
-                                            labelPlacement="floating"
-                                            fill="outline"
-                                            onIonInput={handleInputChange}
-                                            name="lugarIncidencia"
-                                            value={formData.lugarIncidencia}
-                                        ></IonInput>
-                                        <IonTextarea
-                                            id="textArea"
-                                            className='text-start mb-2'
-                                            label="Descripción"
-                                            labelPlacement="floating"
-                                            fill="outline"
-                                            onIonInput={handleInputChange}
-                                            maxlength={150}
-                                            name="descripcion"
-                                            value={formData.descripcion}
-                                        ></IonTextarea>
-
-                                        <div className="d-flex justify-content-center">
-                                            {images.map((image, index) => (
-                                                <img id="img" key={index} src={image} alt={`Captured image ${index + 1}`} />
-                                            ))}
-                                        </div>
-                                        <div className='d-flex flex-row'>
-                                            <IonButton
-                                                onClick={openCamera}
-                                                className='w-25'
-                                            >
-                                                <FaCamera />
-                                            </IonButton>
-
-                                            <IonButton type='submit' className='w-75' id="button-incident" expand="block">Registrar Incidencia</IonButton>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </IonCardContent>
-                    </IonCard>
-                    <IncidencesList setOpenModal={setModalOpen}></IncidencesList>
-
-                </div>
+                <IonHeader>
+                    <IonToolbar>
+                        <IonTitle>Incidencias</IonTitle>
+                    </IonToolbar>
+                </IonHeader>
+                <IonContent className="ion-padding">
+                    <IncidencesList setOpenModal={setModalOpen} signal={1}></IncidencesList>
+                </IonContent>
 
                 <IonModal isOpen={modalOpen}>
                     <IonHeader>
@@ -194,23 +115,79 @@ const ChargeView: React.FC = () => {
                             </IonButtons>
                         </IonToolbar>
                     </IonHeader>
+
                     <IonContent className="ion-padding">
+                        <form >
+                            <IonSelect 
+                                className="mb-3" 
+                                label="Afectación" 
+                                value={formDataCategories.idAfectacion}
+                                name='idAfectacion'
+                                onIonChange={handleInputChange}
+                                interfaceOptions={{
+                                header: 'Afectación',
+                                subHeader: 'Seleccione un grado de afectación',
+                            }}
+                                interface="action-sheet"
+                                placeholder="" fill="outline">
+                                <IonSelectOption value="1">Bajo</IonSelectOption>
+                                <IonSelectOption value="2">Medio</IonSelectOption>
+                                <IonSelectOption value="3">Alto</IonSelectOption>
+                            </IonSelect>
+
+                            <IonSelect 
+                                className="mb-3" 
+                                label="Prioridad" 
+                                value={formDataCategories.idPrioridad}
+                                name='idPrioridad'
+                                onIonChange={handleInputChange}
+                                interfaceOptions={{
+                                header: 'Prioridad',
+                                subHeader: 'Seleccione un grado de prioridad',
+                            }}
+                                interface="action-sheet"
+                                placeholder="" fill="outline">
+                                <IonSelectOption value="1">Bajo</IonSelectOption>
+                                <IonSelectOption value="2">Medio</IonSelectOption>
+                                <IonSelectOption value="3">Alto</IonSelectOption>
+                            </IonSelect>
+
+                            <IonSelect 
+                                className="mb-3" 
+                                label="Riesgo" 
+                                value={formDataCategories.idRiesgo}
+                                name='idRiesgo'
+                                onIonChange={handleInputChange}
+                                interfaceOptions={{
+                                header: 'Riesgo',
+                                subHeader: 'Seleccione un grado de riesgo',
+
+                            }}
+                                interface="action-sheet"
+                                placeholder="" fill="outline">
+                                <IonSelectOption value="1">Bajo</IonSelectOption>
+                                <IonSelectOption value="2">Medio</IonSelectOption>
+                                <IonSelectOption value="3">Alto</IonSelectOption>
+                            </IonSelect>
+                           
+                        </form>
+
                         <IonList inset={true} className='rounded'>
                             {formDataUsers.map((item, index) => (
                                 <IonItemSliding key={index}
                                     disabled={parseInt(item.horas) >= 8} >
                                     <IonItem button={true}>
                                         <IonAvatar aria-hidden="true" slot="start">
-                                            <div id="bubble" style={parseInt(item.horas) >= 8 ? 
-                                                    {background:"gray", color:"black"}: {background:"#1b70d2a0", color:"#023b7b"} }>
+                                            <div id="bubble" style={parseInt(item.horas) >= 8 ?
+                                                { background: "gray", color: "black" } : { background: "#1b70d2a0", color: "#023b7b" }}>
                                                 {item.nombre[0]}
                                             </div>
                                         </IonAvatar>
-                                        <IonLabel 
+                                        <IonLabel
                                             className={parseInt(item.horas) >= 8 ? "text-secondary" : "text-normal fw-bold"}>{item.nombre}</IonLabel>
-                                        {(parseInt(item.horas) >= 8) ? <FaFire style={{ color: "#E87F1D", fontSize:"18px" }} /> : < ></ >}
+                                        {(parseInt(item.horas) >= 8) ? <FaFire style={{ color: "#E87F1D", fontSize: "18px" }} /> : < ></ >}
                                         {(parseInt(item.horas) >= 8) ? <></> : <IoMdArrowDropright className='fs-2 text-secondary' />}
-                                        
+
                                     </IonItem>
                                     <IonItemOptions side='start'>
                                         <IonItemOption onClick={() => {

@@ -18,6 +18,14 @@ export interface NewAssingData {
 	idIncidencia:string
 }
 
+export interface Categories {
+	idIncidence:string, 
+    idEstado:number,
+    idAfectacion:number,
+    idRiesgo:number,
+    idPrioridad:number
+}
+
 export interface imagenes {
     rutaImagen:string,
     tipoImagen:boolean,

@@ -54,15 +54,6 @@ const RegistIncidents: React.FC = () => {
     } = RegistIncidentViewModel();
 
     const {
-        formDataAssing,
-        isOpenAssing,
-        handleAssing,
-        setIsOpenAssing,
-        setIsOpenTextErrorAssing,
-        isOpenTextErrorAssing
-    } = AssingIncidentViewModel();
-
-    const {
         handleLocalStorage
     } = IncidencesViewModel();
 
@@ -98,26 +89,6 @@ const RegistIncidents: React.FC = () => {
                     icon={closeCircleOutline}
                     id="ion-toast-text"
                 ></IonToast>
-
-                <IonAlert
-                    header="¿Seguro que desea asignar la incidencia?"
-                    isOpen={confirmModalOpen}
-                    buttons={[
-                        {
-                            text: 'Cancelar',
-                            role: 'cancel'
-                        },
-                        {
-                            text: 'Aceptar',
-                            role: 'confirm',
-                            handler: () => {
-                                handleLocalStorage('idUsuario', idUser)
-                                handleAssing()
-                                setConfirmModalOpen(false)
-                            },
-                        },
-                    ]}
-                ></IonAlert>
 
                 <div className='d-flex row justify-content-center mt-2 rounded m-1'>
                     <IonCard id="registCard" >
@@ -181,7 +152,7 @@ const RegistIncidents: React.FC = () => {
                             </div>
                         </IonCardContent>
                     </IonCard>
-                    <IncidencesList setOpenModal={setModalOpen}></IncidencesList>
+                    <IncidencesList setOpenModal={setModalOpen} signal={0}></IncidencesList>
 
                 </div>
 

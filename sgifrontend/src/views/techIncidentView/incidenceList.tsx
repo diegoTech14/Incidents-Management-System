@@ -36,7 +36,7 @@ import { IoMdArrowDropright } from "react-icons/io";
 import { FaUserClock } from "react-icons/fa6";
 
 import './incidencesList.css';
-const IncidencesList: React.FC<modalAssing> = ({ setOpenModal }) => {
+const IncidencesList: React.FC<modalAssing> = ({ setOpenModal, signal }) => {
     const history = useHistory();
     const {
         formData,
@@ -51,15 +51,20 @@ const IncidencesList: React.FC<modalAssing> = ({ setOpenModal }) => {
 
     return (
         <IonList inset={true} className='rounded'>
-            <IonCardHeader>
+            {(signal == 0) ?             <IonCardHeader>
                 <IonCardTitle className='text-start fw-bold'>Mis incidencias</IonCardTitle>
                 <IonCardSubtitle><hr /></IonCardSubtitle>
-            </IonCardHeader>
+            </IonCardHeader> : <></>}
             {formData.map((incidence, index) => (
                 <IonItemSliding key={index}>
                     <IonItem button={true}>
                         <IonBadge color="primary" className='ps-2 pe-2'>{index + 1}</IonBadge> &nbsp;
-                        <IonLabel className='fw-bold'>{incidence.nombre}</IonLabel>
+                        <IonLabel>&nbsp;{incidence.codigoIncidencia}
+                            <br />
+                            <span className='fw-bold'>
+                            &nbsp;{incidence.nombre}
+                            </span>
+                        </IonLabel>
 
                         <IoMdArrowDropright className='fs-2 text-secondary' />
                     </IonItem>
@@ -77,13 +82,14 @@ const IncidencesList: React.FC<modalAssing> = ({ setOpenModal }) => {
                             }}
                             color="warning" className='rounded m-1 fs-5 ps-1 pe-1'><FaTools />
                         </IonItemOption>
-                        <IonItemOption
+                        {(signal == 1) ?                         <IonItemOption
                             onClick={() => {
                                 setOpenModal(true)
                                 handleLocalStorage('codigoIncidencia', incidence.codigoIncidencia)
                             }}
-                            color="success" className='rounded m-1 fs-5 ps-1 pe-1 text-light'><FaUserClock />
-                        </IonItemOption>
+                         className='rounded m-1 fs-5 ps-1 pe-1 text-light bg-success'><FaUserClock />
+                        </IonItemOption>: <></>}
+
                     </IonItemOptions>
                 </IonItemSliding>
             ))}
