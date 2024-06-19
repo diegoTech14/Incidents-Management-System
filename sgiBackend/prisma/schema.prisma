@@ -14,12 +14,14 @@ datasource db {
 }
 
 model T_Imagenes {
-  idImagen   Int     @id @unique @default(autoincrement()) @map("cn_id_imagen")
-  rutaImagen String  @map("ct_ruta_imagen")
-  tipoImagen Boolean @map("cb_tipo_imagen")
+  idImagen      Int     @id @unique @default(autoincrement()) @map("cn_id_imagen")
+  rutaImagen    String  @map("ct_ruta_imagen")
+  tipoImagen    Boolean @map("cb_tipo_imagen")
+  idDiagnostico Int?    @map("cn_id_diagnostico")
 
-  idIncidencia String        @map("cn_id_incidencia")
-  incidencia   T_Incidencias @relation(fields: [idIncidencia], references: [codigoIncidencia])
+  idIncidencia String         @map("cn_id_incidencia")
+  incidencia   T_Incidencias  @relation(fields: [idIncidencia], references: [codigoIncidencia])
+  diagnostico  T_Diagnostico? @relation(fields: [idDiagnostico], references: [codigoDiagnostico])
 }
 
 model T_Roles {
@@ -52,11 +54,11 @@ model T_usuarios {
 }
 
 model T_Usuario_X_Incidencia {
-  codigoAsignacion     Int    @id @unique @default(autoincrement()) @map("cn_codigo_asignacion")
-  idUsuario    String @map("ct_cedula_usuario") @db.VarChar(11)
-  idIncidencia String @map("ct_codigo_incidencia") @db.VarChar(12)
+  codigoAsignacion Int    @id @unique @default(autoincrement()) @map("cn_codigo_asignacion")
+  idUsuario        String @map("ct_cedula_usuario") @db.VarChar(11)
+  idIncidencia     String @map("ct_codigo_incidencia") @db.VarChar(12)
 
-  usuario     T_usuarios    @relation(fields: [idUsuario], references: [cedula])
+  usuario    T_usuarios    @relation(fields: [idUsuario], references: [cedula])
   incidencia T_Incidencias @relation(fields: [idIncidencia], references: [codigoIncidencia])
 
   fechaAsignacion DateTime @map("cf_fecha_asignacion")
@@ -149,7 +151,7 @@ model T_Incidencias {
 
   imagenes                 T_Imagenes[]
   diagnostico              T_Diagnostico[]
-  incidencia              T_Usuario_X_Incidencia[]
+  incidencia               T_Usuario_X_Incidencia[]
   T_Bitacora_Cambio_Estado T_Bitacora_Cambio_Estado[]
 }
 
@@ -165,4 +167,5 @@ model T_Diagnostico {
 
   idIncidencia String        @map("ct_codigo_incidencia") @db.VarChar(11)
   Incidencia   T_Incidencias @relation(fields: [idIncidencia], references: [codigoIncidencia])
+  imagenes     T_Imagenes[]
 }

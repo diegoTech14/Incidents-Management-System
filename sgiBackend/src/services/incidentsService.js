@@ -29,6 +29,15 @@ export class IncidentsService {
         return parts[0] + "-" + newNumber + nextNumber;
     }
 
+    async lastDiagnoseId(){
+        const lastId = await prisma.t_Diagnostico.findFirst({
+            orderBy: {
+                fechaDiagnostico:'desc'
+            }
+        })
+        return lastId.codigoDiagnostico;
+    }
+
     async createIncident(req) {
         try {
             await prisma.t_Incidencias.create({
@@ -153,7 +162,8 @@ export class IncidentsService {
                     data: {
                         rutaImagen: `/images/${req.file.filename}`,
                         tipoImagen: true,
-                        idIncidencia: lastId
+                        idIncidencia: lastId,
+                        idDiagnostico: await this.lastDiagnoseId()
                     }
                 }
             )
@@ -224,14 +234,15 @@ export class IncidentsService {
                     codigoIncidencia:req.params.codigoIncidencia
                 },
                 data:{
-                    idEstado:req.body.idEstado,
-                    idAfectacion:req.body.idAfectacion,
-                    idRiesgo:req.body.idRiesgo,
-                    idPrioridad:req.body.idPrioridad,
+                    idEstado:parseInt(req.body.idEstado),
+                    idAfectacion:parseInt(req.body.idAfectacion),
+                    idRiesgo:parseInt(req.body.idRiesgo),
+                    idPrioridad:parseInt(req.body.idPrioridad),
                 }
             })
             return updatedIncident;
         }catch(error){
+            console.log(error)
             return this.#response = false;
         }
     }
