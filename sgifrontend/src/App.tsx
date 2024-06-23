@@ -37,7 +37,7 @@ import RegistIncidents from './views/techIncidentView/registIncident';
 import DiagnoseIncident from './views/techIncidentView/diagnoseIncident';
 import OneIncidence from './views/techIncidentView/oneIncidence';
 import ChargeView from './views/chargeView/charge';
-
+import Menu from './views/separateComponents/menu';
 setupIonicReact();
 
 const App: React.FC = () => (

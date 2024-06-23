@@ -27,7 +27,7 @@ const OneIncidence: React.FC = () => {
         handleGetIncidence,
         setIsOpen
     } = OneIncidenceViewModel();
-    
+
     useEffect(() => {
         handleGetIncidence();
     }, [])
@@ -52,9 +52,9 @@ const OneIncidence: React.FC = () => {
                                 </div>
                                 <div className='d-flex flex-row justify-content-between align-items-center'>
                                     <div className='fs-6'>
-                                        {(formData?.fechaRegistro) ? formData?.fechaRegistro.split("T")[0]:""}
+                                        {(formData?.fechaRegistro) ? formData?.fechaRegistro.split("T")[0] : ""}
                                     </div>
-                                    <div id="tag" className={formData?.Estado.id != undefined ? GlobalResources.getControlColorsStatus()[formData.Estado.id-1]:''}>{formData?.Estado.descripcion}</div>
+
                                 </div>
 
                             </IonCardTitle>
@@ -65,7 +65,30 @@ const OneIncidence: React.FC = () => {
                             <div className='d-flex'>
                                 <div className='w-100'>
                                     <div className='mb-3'>
-                                        <img src="/daño.jpg" alt="" />
+
+                                        <div id="carouselExampleControls" className="carousel carousel-dark slide" data-bs-ride="carousel">
+                                            <div className="carousel-inner">
+                                                {formData?.imagenes.map((image, index) => (
+                                                    (index === 0) ? <div className="carousel-item active">
+                                                        <img src={`http://localhost:3000/${image.rutaImagen}`} className="d-block w-100" alt="..." />
+                                                    </div> : <div className="carousel-item">
+                                                        <img src={`http://localhost:3000/${image.rutaImagen}`} className="d-block w-100" alt="..." />
+                                                    </div>
+
+                                                ))}
+
+
+                                            </div>
+                                            <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                                                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span className="visually-hidden">Previous</span>
+                                            </button>
+                                            <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                                                <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span className="visually-hidden">Next</span>
+                                            </button>
+                                        </div>
+
                                     </div>
                                     <div>
                                         {/* Tags section */}
@@ -136,19 +159,21 @@ const OneIncidence: React.FC = () => {
                                                 <div className='text-dark fw-bold'>Descripción</div>
                                                 <div className='mb-2'>
                                                     <IonTextarea
+                                                        id="textarea"
                                                         labelPlacement="floating"
-                                                        fill="outline"
+                                                        
                                                         value="Lorem Ipsum dolor sit ammet sitter jetech"
                                                         readonly={true}
                                                         placeholder="Enter text"
-                                                        
+
                                                     ></IonTextarea>
                                                 </div>
                                                 <div className='text-dark fw-bold'>Justificación de cierre</div>
                                                 <div className='mb-2'>
                                                     <IonTextarea
+                                                        id="textarea"
                                                         labelPlacement="floating"
-                                                        fill="outline"
+                                                        
                                                         value="Lorem Ipsum dolor sit ammet sitter jetech"
                                                         readonly={true}
                                                         placeholder="Enter text"
@@ -157,8 +182,9 @@ const OneIncidence: React.FC = () => {
                                                 <div className='text-dark fw-bold'>Observaciones</div>
                                                 <div className='mb-2'>
                                                     <IonTextarea
+                                                        id="textarea"
                                                         labelPlacement="floating"
-                                                        fill="outline"
+                                          
                                                         readonly={true}
                                                         value="Lorem Ipsum dolor sit ammet sitter jetech"
                                                         placeholder="Enter text"

@@ -4,6 +4,7 @@ import { prisma } from "../db.js";
 export class IncidentsService {
 
     #response = false;
+
     async #generateIncidentCode() {
         const lastIncident = await prisma.t_Incidencias.findFirst({
             orderBy: {
@@ -226,7 +227,7 @@ export class IncidentsService {
         }
     }
 
-    async updateCategoriesIncidente(req){
+    async updateCategoriesIncident(req){
 
         try{
             const updatedIncident = await prisma.t_Incidencias.update({
@@ -242,9 +243,25 @@ export class IncidentsService {
             })
             return updatedIncident;
         }catch(error){
-            console.log(error)
+
             return this.#response = false;
         }
     }
 
+    async changeStatusIncident(req){
+        try{
+            const updateIncident = await prisma.t_Incidencias.update({
+                where:{
+                    codigoIncidencia:req.params.codigoIncidencia
+                },
+                data:{
+                    idEstado:parseInt(req.body.idEstado),
+                }
+            })
+            return updateIncident;
+        }catch(error){
+            console.log(error)
+            return this.#response = false;
+        }
+    }
 }

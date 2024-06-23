@@ -54,5 +54,17 @@ export interface oneIncidence {
             rutaImagen:string,
             tiempoImagen:boolean
         }
+    ],
+    diagnostico:[
+        {
+            codigoDiagnostico: number,
+			fechaDiagnostico: string,
+			diagnostico: string,
+			tiempoEstimado: number,
+			observacion: string,
+			compra: boolean,
+			idUsuario: string,
+			idIncidencia: string
+        }
     ]
 }

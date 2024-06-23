@@ -24,6 +24,7 @@ routerIncidents.post('/incidents/assign', controller.assignIncidence)
 routerIncidents.post('/incidents/images', upload.single('file'), controller.saveImageCreated);
 routerIncidents.post('/incidents/images/diagnose', upload.single('file'), controller.saveImageDiagnose);
 routerIncidents.patch('/incidents/updateCategories/:codigoIncidencia', controller.updateCategories)
+routerIncidents.put('/incidents/updateStatus/:codigoIncidencia', controller.updateStatus)
 
 //get routes
 routerIncidents.get('/incidents/byUser', controller.getIncidences);

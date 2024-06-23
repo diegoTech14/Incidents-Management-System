@@ -51,7 +51,7 @@ const IncidencesList: React.FC<modalAssing> = ({ setOpenModal, signal }) => {
 
     return (
         <IonList inset={true} className='rounded'>
-            {(signal == 0) ?             <IonCardHeader>
+            {(signal == 0) ? <IonCardHeader>
                 <IonCardTitle className='text-start fw-bold'>Mis incidencias</IonCardTitle>
                 <IonCardSubtitle><hr /></IonCardSubtitle>
             </IonCardHeader> : <></>}
@@ -62,7 +62,7 @@ const IncidencesList: React.FC<modalAssing> = ({ setOpenModal, signal }) => {
                         <IonLabel>&nbsp;{incidence.codigoIncidencia}
                             <br />
                             <span className='fw-bold'>
-                            &nbsp;{incidence.nombre}
+                                &nbsp;{incidence.nombre}
                             </span>
                         </IonLabel>
 
@@ -82,13 +82,13 @@ const IncidencesList: React.FC<modalAssing> = ({ setOpenModal, signal }) => {
                             }}
                             color="warning" className='rounded m-1 fs-5 ps-1 pe-1'><FaTools />
                         </IonItemOption>
-                        {(signal == 1) ?                         <IonItemOption
+                        {(signal == 1) ? <IonItemOption
                             onClick={() => {
                                 setOpenModal(true)
                                 handleLocalStorage('codigoIncidencia', incidence.codigoIncidencia)
                             }}
-                         className='rounded m-1 fs-5 ps-1 pe-1 text-light bg-success'><FaUserClock />
-                        </IonItemOption>: <></>}
+                            className='rounded m-1 fs-5 ps-1 pe-1 text-light bg-success'><FaUserClock />
+                        </IonItemOption> : <></>}
 
                     </IonItemOptions>
                 </IonItemSliding>

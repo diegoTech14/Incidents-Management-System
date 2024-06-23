@@ -50,7 +50,12 @@ import { IncidentsService } from "../services/incidentsService.js";
         }
 
         updateCategories = async(req, res) => {
-            const updatedCategories = await this.service.updateCategoriesIncidente(req);
+            const updatedCategories = await this.service.updateCategoriesIncident(req);
             return (updatedCategories) ? this.#response = res.status(200).json(updatedCategories) : this.#response = res.status(500).json([])
+        }
+
+        updateStatus = async(req, res) => {
+            const updatedStatus = await this.service.changeStatusIncident(req);
+            return (updatedStatus) ? this.#response = res.status(200).json(updatedStatus) : this.#response = res.status(500).json([])
         }
     }
