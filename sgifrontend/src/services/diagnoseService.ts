@@ -28,4 +28,17 @@ export class DianoseService{
             }
         }
       }
+
+      public async getDiagnose(idDiagnose: number) {
+        try{
+            const diagnose = await axios.get(`http://localhost:3000/api/incidents/diagnose/one/${idDiagnose}`)
+            return diagnose.data;
+        }catch(error){
+            if(axios.isAxiosError(error)){
+                throw new Error(error.response?.data?.error || "Error while diagnosing")
+            }else{
+                throw new Error("Server error")
+            }
+        }
+      }
 }

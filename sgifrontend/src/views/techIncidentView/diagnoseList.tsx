@@ -21,20 +21,17 @@ import {
     IonContent
 } from '@ionic/react';
 import { IoIosInformationCircle } from "react-icons/io";
-import { chevronForward, listCircle } from 'ionicons/icons';
+import { chevronForward } from 'ionicons/icons';
 import { IonButton } from '@ionic/react';
-import { DiagnoseIncidentViewModel } from '../../viewModels/diagnoseViewModel';
-import { FaCamera } from "react-icons/fa";
 import './diagnoseIncidence.css';
-import { closeCircleOutline } from 'ionicons/icons';
 import { OneIncidenceViewModel } from '../../viewModels/oneIncidenceViewModel';
 import { useEffect,useState } from 'react';
 import { IncidencesViewModel } from '../../viewModels/incidencesViewModel';
-import { modalAssing } from '../../models/globalModels';
+import { useIonRouter } from '@ionic/react';
 import './registIncident.css';
 
 const DiagnoseList: React.FC = () => {
-
+    const navigate = useIonRouter();
     const [modalOpen, setModalOpen] = useState(false);
     const {
         formData,
@@ -54,7 +51,7 @@ const DiagnoseList: React.FC = () => {
         
         <div>
         
-            <IonList inset={true} className='rounded'>
+            <IonList inset={true} >
                 <IonCardHeader>
                     <IonCardTitle className='text-start fw-bold'>Diagnosticos</IonCardTitle>
                     <IonCardSubtitle><hr /></IonCardSubtitle>
@@ -83,8 +80,9 @@ const DiagnoseList: React.FC = () => {
                         <IonItemOptions side='start'>
                             <IonItemOption className='rounded m-1 fs-5 ps-1 pe-1'
                                 onClick={() => {
-
-                                    handleLocalStorage('codigoIncidencia', diagnos.codigoDiagnostico.toString())
+                                    handleLocalStorage('codigoDiagnostico', diagnos.codigoDiagnostico.toString())
+                                    navigate.push('/diagnoseDetail', 'forward')
+                                    
                                 }}
                             >
                                 <IoIosInformationCircle />

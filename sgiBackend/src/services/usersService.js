@@ -68,6 +68,7 @@ export class UsersService {
         return response;
     }
 
+
     async usersIncidences() {
         let response = false;
 
@@ -112,6 +113,55 @@ SELECT
                 t_usuarios.ct_cedula AS 'cedula',
                 CONCAT(t_usuarios.ct_nombre, " ", t_usuarios.ct_apellido_uno, " ", t_usuarios.ct_apellido_dos) AS 'Nombre',
                 0 'total de horas' FROM t_usuarios WHERE t_usuarios.ct_cedula NOT IN (SELECT DISTINCT t_usuario_x_incidencia.ct_cedula_usuario FROM t_usuario_x_incidencia)`;
+            return results;
+        } catch (error) {
+            response = false;
+        }
+        return response
+    }
+
+    async suspendUser(req) {
+        let response = false;
+        try {
+            await prisma.t_usuarios.update({
+                where: {
+                    cedula: req.params.cedula
+                },
+                data: {
+                    estado: req.body.estado
+                }
+            })
+            response = true;
+        } catch (error) {
+            response = false;
+        }
+        return response;
+    }
+
+    async updateUser(req) {
+        let response = false;
+        try {
+            await prisma.t_usuarios.update({
+                where: {
+                    cedula: req.params.cedula
+                },
+                data: {
+                    ...req.body,
+                    contrasena: await this.#encriptPassword(req.body.contrasena)
+                }
+            })
+            response = true;
+        } catch (error) {
+            response = false;
+        }
+        return response;
+    }
+
+    async counterUsers(req) {
+        let response = false;
+        try {
+            const results = await prisma.$queryRaw`
+            SELECT COUNT(ct_cedula),cn_id_rol   FROM t_usuarios_x_rol GROUP BY cn_id_rol;`;
             return results;
         } catch (error) {
             response = false;

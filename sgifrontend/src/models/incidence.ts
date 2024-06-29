@@ -52,7 +52,7 @@ export interface oneIncidence {
     imagenes:[
         {
             rutaImagen:string,
-            tiempoImagen:boolean
+            tipoImagen:boolean
         }
     ],
     diagnostico:[

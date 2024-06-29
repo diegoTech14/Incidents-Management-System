@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { useIonLoading } from "@ionic/react";
 import { DianoseService } from "../services/diagnoseService";
-import { NewDiagnose } from "../models/diagnoseIncident";
+import { NewDiagnose, OneDiagnose } from "../models/diagnoseIncident";
 import { AuthService } from "../services/AuthService";
 
 export function DiagnoseIncidentViewModel() {
@@ -21,6 +21,21 @@ export function DiagnoseIncidentViewModel() {
         compra: false
     })
 
+    const [formDataOne, setFormDataOne] = useState({
+        codigoDiagnostico:0,
+        fechaDiagnostico: '',
+        diagnostico: '',
+        tiempoEstimado: '',
+        observacion: '',
+        compra: false,
+        imagenes:[
+            {
+                rutaImagen:'',
+                tipoImagen:true
+            }
+        ]
+    })
+
     const openCamera = async () => {
         try {
             const response = await Camera.getPhoto({
@@ -32,7 +47,6 @@ export function DiagnoseIncidentViewModel() {
             // Verificar si response.webPath es un string antes de actualizar el estado
             if (response.webPath) {
                 setImages((prevImages: string[]) => [...prevImages, response.webPath as string]);
-                console.log(images)
             }
         } catch (error) {
             console.error('Error taking photo', error);
@@ -42,9 +56,9 @@ export function DiagnoseIncidentViewModel() {
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
         const allowedAlternativeChars = /[a-zA-Z]/;
-        
+
         if (name == "tiempoEstimado") {
-            if(allowedAlternativeChars.test(value)){
+            if (allowedAlternativeChars.test(value)) {
                 setIsOpenTextError(true);
             }
         }
@@ -80,6 +94,15 @@ export function DiagnoseIncidentViewModel() {
         }
     }
 
+    const handleGetDiagnose = async () => {
+        try {
+            const diagnose = await register.getDiagnose(parseInt(localStorage.getItem('codigoDiagnostico') || "0"));
+            setFormDataOne(diagnose)
+        } catch (error) {
+            console.error('Error getting diagnose');
+        }
+    }
+
     const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
 
         e.preventDefault();
@@ -97,19 +120,21 @@ export function DiagnoseIncidentViewModel() {
             setIsOpen(true);
         }
     }
-    
+
 
     return {
         images,
         setImages,
         openCamera,
         formData,
+        formDataOne,
         isOpen,
         isOpenTextError,
         setIsOpenTextError,
         handleCreate,
         setIsOpen,
         handleInputChange,
-        handleToggleChange
+        handleToggleChange,
+        handleGetDiagnose
     }
 }

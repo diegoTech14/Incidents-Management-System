@@ -58,4 +58,30 @@ import { IncidentsService } from "../services/incidentsService.js";
             const updatedStatus = await this.service.changeStatusIncident(req);
             return (updatedStatus) ? this.#response = res.status(200).json(updatedStatus) : this.#response = res.status(500).json([])
         }
+
+        updateCost = async(req, res) => {
+            const updateCostIncidence = await this.service.setCost(req);
+            return (updateCostIncidence) ? this.#response = res.status(200).json(updateCostIncidence) : this.#response = res.status(500).json([])
+        }
+
+        updateClose = async(req, res) => {
+            const updateCloseIncidence = await this.service.closeIncidence(req);
+            return (updateCloseIncidence) ? this.#response = res.status(200).json(updateCloseIncidence) : this.#response = res.status(500).json([])
+        }
+
+        getDiagnose = async(req, res) => {
+            const diagnose = await this.service.getOneDiagnose(req);
+            return (diagnose) ? this.#response = res.status(200).json(diagnose) : this.#response = res.status(200).json([])
+        }
+
+        saveStatusBinnacle = async (req, res) => {
+            const statusBinnacle = await this.service.saveStatusBinnacle(req)
+            return (statusBinnacle) ? this.#response = res.status(200).json(statusBinnacle) : this.#response = res.status(500).json({})
+        }
+        getReport = async(req, res) => {
+            const report = await this.service.chargeWorkReport(req);
+            return (report) ? this.#response = res.status(200).json(report) : this.#response = res.status(200).json([])    
+        }
+
+        
     }

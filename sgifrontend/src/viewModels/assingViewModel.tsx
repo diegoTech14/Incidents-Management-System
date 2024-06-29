@@ -46,7 +46,6 @@ export function AssingIncidentViewModel(){
 
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
-        console.log(name, value)
 
         setFormDataCategories(prevState => ({
             ...prevState,

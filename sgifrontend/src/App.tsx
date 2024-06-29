@@ -37,7 +37,9 @@ import RegistIncidents from './views/techIncidentView/registIncident';
 import DiagnoseIncident from './views/techIncidentView/diagnoseIncident';
 import OneIncidence from './views/techIncidentView/oneIncidence';
 import ChargeView from './views/chargeView/charge';
-import Menu from './views/separateComponents/menu';
+import OneDiagnose from './views/techIncidentView/oneDiagnose';
+import SupervisorView from './views/supervisor/supervisor';
+import HoursReport from './views/reports/hoursReport';
 setupIonicReact();
 
 const App: React.FC = () => (
@@ -49,6 +51,9 @@ const App: React.FC = () => (
         <Route path="/diagnose" component={DiagnoseIncident} exact/>
         <Route path="/incidence" component={OneIncidence} exact/>
         <Route path="/charge" component={ChargeView} exact/>
+        <Route path="/supervisor" component={SupervisorView} exact/>
+        <Route path="/diagnoseDetail" component={OneDiagnose} exact/>
+        <Route path="/hoursReport" component={HoursReport} exact/>
         <Redirect exact from="/" to="/login"/>
       </IonRouterOutlet>
 

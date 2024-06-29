@@ -53,9 +53,6 @@ const RegistIncidents: React.FC = () => {
         isOpenTextError
     } = RegistIncidentViewModel();
 
-    const {
-        handleLocalStorage
-    } = IncidencesViewModel();
 
     const {
         formDataUsers,
@@ -70,9 +67,8 @@ const RegistIncidents: React.FC = () => {
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
     const [idUser, setIdUser] = useState("");
     return (
-        <IonContent fullscreen id="main-content">
-
-            <Menu title='Registrar Incidencia' component={
+        <Menu title='Registrar Incidencia' component={
+            <IonContent fullscreen>
                 <>
                     <IonAlert
                         isOpen={isOpen}
@@ -95,7 +91,6 @@ const RegistIncidents: React.FC = () => {
                         <IonCard id="registCard" className='shadow-none'>
                             <IonCardHeader>
                                 <IonCardTitle className='text-start fw-bold'></IonCardTitle>
-                                <IonCardSubtitle><hr /></IonCardSubtitle>
                             </IonCardHeader>
 
                             <IonCardContent>
@@ -106,7 +101,8 @@ const RegistIncidents: React.FC = () => {
                                                 type='text'
                                                 required
                                                 className="text-start mb-2"
-                                                label="Nombre" labelPlacement="floating"
+                                                label="Nombre" 
+                                                labelPlacement="floating"
                                                 fill="outline"
                                                 onIonInput={handleInputChange}
                                                 name="nombre"
@@ -199,10 +195,11 @@ const RegistIncidents: React.FC = () => {
                     </IonModal>
 
                 </>
-            }></Menu>
+            </IonContent>
+        } backRoute='/regist'></Menu>
 
 
-        </IonContent>
+
     )
 }
 export default RegistIncidents;

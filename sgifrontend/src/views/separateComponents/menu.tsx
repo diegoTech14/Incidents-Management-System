@@ -9,7 +9,8 @@ import {
   IonToolbar,
   IonItem, 
   IonLabel, 
-  IonList
+  IonList,
+  IonMenuToggle
 } from '@ionic/react';
 import { menu } from '../../models/globalModels';
 import './menu.css'
@@ -20,8 +21,14 @@ import { FaUsersCog } from "react-icons/fa";
 import { AiFillThunderbolt } from "react-icons/ai";
 import { IoArrowBack } from "react-icons/io5";
 import { SiGoogledocs } from "react-icons/si";
+import { useHistory } from 'react-router';
+import { useIonRouter } from '@ionic/react';
+import { BsDoorClosed } from "react-icons/bs";
 
-const Menu: React.FC<menu> = ({ title, component }) => {
+const Menu: React.FC<menu> = ({ title, component, backRoute }) => {
+
+  const navigate = useIonRouter();
+  
   const {
     formDataUser,
     handleGetUsers
@@ -61,19 +68,29 @@ const Menu: React.FC<menu> = ({ title, component }) => {
         <SiGoogledocs id="icon"/>&nbsp; Reportes
         </IonLabel>
       </IonItem>
-
-      <IonItem>
+      <IonMenuToggle>
+      <IonItem onClick={() =>{
+          navigate.push(backRoute, 'forward')
+        }}>
         <IonLabel>
         <IoArrowBack id="icon"/>&nbsp; Volver
         </IonLabel>
       </IonItem>
+      <IonItem onClick={() =>{
+          navigate.push(backRoute, 'forward')
+        }}>
+        <IonLabel>
+        <BsDoorClosed id="icon"/>&nbsp; Cerrar sesión
+        </IonLabel>
+      </IonItem>
+      </IonMenuToggle>
     </IonList>
         </IonContent>
       </IonMenu>
       <IonPage id="main-content">
         <IonHeader>
           <IonToolbar>
-            <IonButtons slot="start">
+            <IonButtons slot="start" >
               <IonMenuButton></IonMenuButton>
             </IonButtons>
             <IonTitle>{title}</IonTitle>

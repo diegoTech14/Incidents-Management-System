@@ -24,6 +24,7 @@ import {
     IonHeader,
     IonToolbar,
     IonTitle,
+    IonPage,
     IonSelect,
     IonSelectOption
 } from '@ionic/react';
@@ -31,33 +32,30 @@ import { useEffect } from 'react';
 import { AssingIncidentViewModel } from '../../viewModels/assingViewModel';
 import UsersIncidencesViewModel from '../../viewModels/usersToAssingViewModel';
 import { IonButton } from '@ionic/react';
-import { RegistIncidentViewModel } from '../../viewModels/registIncidentViewModel';
-import { FaCamera } from "react-icons/fa";
 import IncidencesList from '../techIncidentView/incidenceList';
-import { closeCircleOutline } from 'ionicons/icons';
 import { IoMdArrowDropright } from "react-icons/io";
 import { MdAssignmentTurnedIn } from "react-icons/md";
 import { IoMdCloseCircle } from "react-icons/io";
 import { IncidencesViewModel } from '../../viewModels/incidencesViewModel';
 import { FaFire } from "react-icons/fa";
-
+import Menu from '../separateComponents/menu';
 import '../usersAssing.css';
 const ChargeView: React.FC = () => {
 
     const {
-        formDataAssing,
-        isOpenAssing,
         handleAssing,
-        setIsOpenAssing,
-        setIsOpenTextErrorAssing,
-        isOpenTextErrorAssing,
         formDataCategories,
-        setFormDataCategories,
         handleInputChange,
     } = AssingIncidentViewModel();
 
     const {
-        handleLocalStorage
+        handleLocalStorage,
+        handleChangeStatus,
+        openCost,
+        setOpenCost,
+        handleChangeCost,
+        formDataCost, 
+        handleInputIncidence,
     } = IncidencesViewModel();
 
     const {
@@ -73,10 +71,8 @@ const ChargeView: React.FC = () => {
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
     const [idUser, setIdUser] = useState("");
     return (
-        <IonContent fullscreen>
-
+        <Menu title="Incidencias" component={
             <div id="containerAll">
-
                 <IonAlert
                     header="¿Seguro que desea asignar la incidencia?"
                     isOpen={confirmModalOpen}
@@ -91,20 +87,19 @@ const ChargeView: React.FC = () => {
                             handler: () => {
                                 handleLocalStorage('idUsuario', idUser)
                                 handleAssing()
+                                handleChangeStatus(2)
                                 setConfirmModalOpen(false)
                             },
                         },
                     ]}
                 ></IonAlert>
 
-                <IonHeader>
-                    <IonToolbar>
-                        <IonTitle>Incidencias</IonTitle>
-                    </IonToolbar>
-                </IonHeader>
-                <IonContent className="ion-padding">
-                    <IncidencesList setOpenModal={setModalOpen} signal={1}></IncidencesList>
-                </IonContent>
+                <IonCard className='shadow-none'>
+                    <IonCardContent className="ion-padding">
+                        <IncidencesList setOpenModal={setModalOpen} setOpenCost={setOpenCost} signal={1}></IncidencesList>
+                    </IonCardContent>
+                </IonCard>
+
 
                 <IonModal isOpen={modalOpen}>
                     <IonHeader>
@@ -118,16 +113,16 @@ const ChargeView: React.FC = () => {
 
                     <IonContent className="ion-padding">
                         <form >
-                            <IonSelect 
-                                className="mb-3" 
-                                label="Afectación" 
+                            <IonSelect
+                                className="mb-3"
+                                label="Afectación"
                                 value={formDataCategories.idAfectacion}
                                 name='idAfectacion'
                                 onIonChange={handleInputChange}
                                 interfaceOptions={{
-                                header: 'Afectación',
-                                subHeader: 'Seleccione un grado de afectación',
-                            }}
+                                    header: 'Afectación',
+                                    subHeader: 'Seleccione un grado de afectación',
+                                }}
                                 interface="action-sheet"
                                 placeholder="" fill="outline">
                                 <IonSelectOption value="1">Bajo</IonSelectOption>
@@ -135,16 +130,16 @@ const ChargeView: React.FC = () => {
                                 <IonSelectOption value="3">Alto</IonSelectOption>
                             </IonSelect>
 
-                            <IonSelect 
-                                className="mb-3" 
-                                label="Prioridad" 
+                            <IonSelect
+                                className="mb-3"
+                                label="Prioridad"
                                 value={formDataCategories.idPrioridad}
                                 name='idPrioridad'
                                 onIonChange={handleInputChange}
                                 interfaceOptions={{
-                                header: 'Prioridad',
-                                subHeader: 'Seleccione un grado de prioridad',
-                            }}
+                                    header: 'Prioridad',
+                                    subHeader: 'Seleccione un grado de prioridad',
+                                }}
                                 interface="action-sheet"
                                 placeholder="" fill="outline">
                                 <IonSelectOption value="1">Bajo</IonSelectOption>
@@ -152,24 +147,23 @@ const ChargeView: React.FC = () => {
                                 <IonSelectOption value="3">Alto</IonSelectOption>
                             </IonSelect>
 
-                            <IonSelect 
-                                className="mb-3" 
-                                label="Riesgo" 
+                            <IonSelect
+                                className="mb-3"
+                                label="Riesgo"
                                 value={formDataCategories.idRiesgo}
                                 name='idRiesgo'
                                 onIonChange={handleInputChange}
                                 interfaceOptions={{
-                                header: 'Riesgo',
-                                subHeader: 'Seleccione un grado de riesgo',
+                                    header: 'Riesgo',
+                                    subHeader: 'Seleccione un grado de riesgo',
 
-                            }}
+                                }}
                                 interface="action-sheet"
                                 placeholder="" fill="outline">
                                 <IonSelectOption value="1">Bajo</IonSelectOption>
                                 <IonSelectOption value="2">Medio</IonSelectOption>
                                 <IonSelectOption value="3">Alto</IonSelectOption>
                             </IonSelect>
-                           
                         </form>
 
                         <IonList inset={true} className='rounded'>
@@ -201,10 +195,43 @@ const ChargeView: React.FC = () => {
                             ))}
                         </IonList>
                     </IonContent>
-                </IonModal>
-            </div>
 
-        </IonContent>
+                </IonModal>
+
+
+                <IonModal isOpen={openCost}>
+                    <IonHeader>
+                        <IonToolbar>
+                            <IonTitle className='fw-bold'>Asignación de costo</IonTitle>
+                            <IonButtons slot="end">
+                                <IonButton onClick={() => setOpenCost(false)}><IoMdCloseCircle className='fs-4 text-danger me-3' /></IonButton>
+                            </IonButtons>
+                        </IonToolbar>
+                    </IonHeader>
+
+                    <IonContent className="ion-padding">
+                        <form onSubmit={handleChangeCost}>
+                            <IonInput
+                                onIonInput={handleInputIncidence}
+                                placeholder='5000'
+                                label="Costo"
+                                className=''
+                                name="cost"
+                                fill="outline"
+                                labelPlacement="floating"
+                                value={formDataCost.cost}
+                            >
+                            </IonInput>
+                            <IonButton type='submit' color='primary' className='w-100 mt-4'>ASIGNAR PAGO</IonButton>
+                        </form>
+
+                    </IonContent>
+
+                </IonModal>
+
+
+            </div>
+        } backRoute='/charge'></Menu>
     )
 }
 export default ChargeView;

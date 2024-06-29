@@ -4,10 +4,20 @@ export interface returnValue{
 
 export interface modalAssing {
     setOpenModal:React.Dispatch<React.SetStateAction<boolean>>;
+    setOpenCost?:React.Dispatch<React.SetStateAction<boolean>>;
     signal:number
 }
 
-export interface menu{
+export interface menu {
     title:string,
-    component: React.ReactNode
+    component: React.ReactNode,
+    backRoute:string
 }
+
+export interface hoursReport {
+    nombre:string,
+    horasPendientes:string,
+    horasTerminadas:string,
+    descripcion:string
+}
+

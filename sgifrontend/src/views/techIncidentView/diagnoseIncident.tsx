@@ -2,15 +2,11 @@ import React from 'react'; import './registIncident.css';
 import {
     IonCard,
     IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
     IonInput,
     IonTextarea,
     IonAlert,
     IonToggle,
     IonToast,
-    IonContent
 } from '@ionic/react';
 import { IonButton } from '@ionic/react';
 import { DiagnoseIncidentViewModel } from '../../viewModels/diagnoseViewModel';
@@ -34,30 +30,29 @@ const DiagnoseIncident: React.FC = () => {
         handleToggleChange
     } = DiagnoseIncidentViewModel();
 
-
     return (
-        <IonContent fullscreen>
+        <Menu title='Diagnosticar Incidencias' component={
             
-            
-                <IonAlert
-                    isOpen={isOpen}
-                    header="¡Unauthorized!"
-                    subHeader="Email or password wrong"
-                    message="Try again please"
-                    buttons={['Action']}
-                    onDidDismiss={() => setIsOpen(false)}
-                ></IonAlert>
+                <>
+                    <IonAlert
+                        isOpen={isOpen}
+                        header="¡Unauthorized!"
+                        subHeader="Email or password wrong"
+                        message="Try again please"
+                        buttons={['Action']}
+                        onDidDismiss={() => setIsOpen(false)}
+                    ></IonAlert>
 
-                <IonToast
-                    isOpen={isOpenTextError}
-                    onDidDismiss={() => setIsOpenTextError(false)}
-                    message="No son permitidas las letras ni espacios en blanco"
-                    duration={3000}
-                    icon={closeCircleOutline}
-                    id="ion-toast-text"
-                ></IonToast>
+                    <IonToast
+                        isOpen={isOpenTextError}
+                        onDidDismiss={() => setIsOpenTextError(false)}
+                        message="No son permitidas las letras ni espacios en blanco"
+                        duration={3000}
+                        icon={closeCircleOutline}
+                        id="ion-toast-text"
+                    ></IonToast>
 
-                    <IonCard id="registCard" >
+                    <IonCard id="registCard" className='shadow-none'>
                         <IonCardContent>
                             <div className='d-flex'>
                                 <div className='w-100'>
@@ -125,9 +120,11 @@ const DiagnoseIncident: React.FC = () => {
                         </IonCardContent>
                     </IonCard>
                     <DiagnoseList></DiagnoseList>
-          
-  
-        </IonContent>
+
+                </>
+           
+        } backRoute='/regist'>
+        </Menu>
     )
 }
 export default DiagnoseIncident;

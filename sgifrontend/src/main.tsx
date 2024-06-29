@@ -4,10 +4,9 @@ import App from './App';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
-import Menu from './views/separateComponents/menu';
-import { AuthService } from './services/AuthService';
+
 root.render(
-  <React.StrictMode>  
-    <App />
+  <React.StrictMode> 
+    <App />    
   </React.StrictMode>
 );

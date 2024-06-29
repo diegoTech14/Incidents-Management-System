@@ -95,8 +95,6 @@ export function RegistIncidentViewModel() {
         }
     }
 
-
-
     return {
         images,
         setImages,

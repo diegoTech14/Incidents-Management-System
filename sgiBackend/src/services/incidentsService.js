@@ -30,10 +30,10 @@ export class IncidentsService {
         return parts[0] + "-" + newNumber + nextNumber;
     }
 
-    async lastDiagnoseId(){
+    async lastDiagnoseId() {
         const lastId = await prisma.t_Diagnostico.findFirst({
             orderBy: {
-                fechaDiagnostico:'desc'
+                fechaDiagnostico: 'desc'
             }
         })
         return lastId.codigoDiagnostico;
@@ -101,7 +101,7 @@ export class IncidentsService {
             let incidences = {};
 
             if (req.query.rol == 2) {
-                incidences = await prisma.t_Incidencias.findMany(
+                incidences = await prisma.t_incidencias.findMany(
                     {
                         where: {
                             idEstado: {
@@ -117,7 +117,7 @@ export class IncidentsService {
                     }
                 );
             } else if (req.query.rol == 3) {
-                incidences = await prisma.t_Incidencias.findMany(
+                incidences = await prisma.t_incidencias.findMany(
                     {
                         select: {
                             codigoIncidencia: true,
@@ -126,11 +126,11 @@ export class IncidentsService {
                         },
                     }
                 );
-                console.log(incidences)
             }
 
             return incidences;
         } catch (error) {
+            console.log(error)
             this.#response = false;
         }
     }
@@ -177,9 +177,7 @@ export class IncidentsService {
     }
 
     async setIncidenceToTechnician(req) {
-
         try {
-            console.log(req.body.idIncidencia)
             await prisma.t_Usuario_X_Incidencia.create(
                 {
                     data: {
@@ -227,40 +225,195 @@ export class IncidentsService {
         }
     }
 
-    async updateCategoriesIncident(req){
+    async updateCategoriesIncident(req) {
 
-        try{
+        try {
             const updatedIncident = await prisma.t_Incidencias.update({
-                where:{
-                    codigoIncidencia:req.params.codigoIncidencia
+                where: {
+                    codigoIncidencia: req.params.codigoIncidencia
                 },
-                data:{
-                    idEstado:parseInt(req.body.idEstado),
-                    idAfectacion:parseInt(req.body.idAfectacion),
-                    idRiesgo:parseInt(req.body.idRiesgo),
-                    idPrioridad:parseInt(req.body.idPrioridad),
+                data: {
+                    idEstado: parseInt(req.body.idEstado),
+                    idAfectacion: parseInt(req.body.idAfectacion),
+                    idRiesgo: parseInt(req.body.idRiesgo),
+                    idPrioridad: parseInt(req.body.idPrioridad),
                 }
             })
             return updatedIncident;
-        }catch(error){
+        } catch (error) {
 
             return this.#response = false;
         }
     }
 
-    async changeStatusIncident(req){
-        try{
+    async gettingStatusFromIncidence(idIncidencia) {
+        try {
+            const incidence = await prisma.t_Incidencias.findFirst(
+                {
+                    where: {
+                        codigoIncidencia: idIncidencia
+                    },
+                    select: {
+                        Estado: true,
+                    },
+
+                }
+            );
+            return incidence;
+        } catch (error) {
+            return this.#response = false;
+        }
+    }
+
+    async saveStatusBinnacle(object) {
+
+        try {
+            console.log(object)
+            const newRecord = await prisma.t_Bitacora_Cambio_Estado.create(
+                {
+                    data: {
+                        ...object
+                    }
+                }
+            )
+            console.log("eee: ", newRecord)
+            this.#response = true;
+            return newRecord
+        } catch (error) {
+            console.log(error)
+            this.#response = false;
+        }
+        return this.#response;
+    }
+
+    async changeStatusIncident(req) {
+        try {
+            const currentlyStatus = await this.gettingStatusFromIncidence(req.params.codigoIncidencia);
             const updateIncident = await prisma.t_Incidencias.update({
-                where:{
-                    codigoIncidencia:req.params.codigoIncidencia
+                where: {
+                    codigoIncidencia: req.params.codigoIncidencia
                 },
-                data:{
-                    idEstado:parseInt(req.body.idEstado),
+                data: {
+                    idEstado: parseInt(req.body.idEstado),
+                }
+            })
+            await this.saveStatusBinnacle({
+                idIncidencia: req.params.codigoIncidencia,
+                fechaCambio: new Date().toISOString(),
+                idEstadoAnterior: currentlyStatus.Estado.id,
+                idEstadoActual: parseInt(req.body.idEstado),
+                idUsuario: req.body.idUsuario
+            })
+            return updateIncident;
+
+        } catch (error) {
+            console.log(error)
+            return this.#response = false;
+        }
+    }
+
+    async closeIncidence(req) {
+        try {
+            const updateIncident = await prisma.t_Incidencias.update({
+                where: {
+                    codigoIncidencia: req.params.codigoIncidencia
+                },
+                data: {
+                    justificacionCierre: req.body.justificacion,
                 }
             })
             return updateIncident;
-        }catch(error){
+        } catch (error) {
             console.log(error)
+            return this.#response = false;
+        }
+    }
+
+    async getOneDiagnose(req) {
+        try {
+            const diagnose = await prisma.t_Diagnostico.findFirst({
+                where: {
+                    codigoDiagnostico: parseInt(req.params.codigoDiagnostico)
+                }, select: {
+                    codigoDiagnostico: true,
+                    fechaDiagnostico: true,
+                    diagnostico: true,
+                    tiempoEstimado: true,
+                    observacion: true,
+                    compra: true,
+                    imagenes: true
+                }
+            })
+            return diagnose;
+        } catch (error) {
+            console.log(error)
+            return this.#response = false;
+        }
+    }
+
+    async setCost(req) {
+        try {
+            const updateIncident = await prisma.t_Incidencias.update({
+                where: {
+                    codigoIncidencia: req.params.codigoIncidencia
+                },
+                data: {
+                    costo: parseInt(req.body.costo),
+                }
+            })
+            return updateIncident;
+        } catch (error) {
+            console.log(error)
+            return this.#response = false;
+        }
+    }
+
+    async closeIncidence(req) {
+        try {
+            const updateIncident = await prisma.t_Incidencias.update({
+                where: {
+                    codigoIncidencia: req.params.codigoIncidencia
+                },
+                data: {
+                    justificacionCierre: req.body.close,
+                }
+            })
+
+            return updateIncident;
+        } catch (error) {
+            console.log(error)
+            return this.#response = false;
+        }
+    }
+
+    async chargeWorkReport() {
+        try {
+            const result = await prisma.$queryRaw`
+            SELECT 
+    CONCAT(t_usuarios.ct_nombre, " ", t_usuarios.ct_apellido_uno, " ", t_usuarios.ct_apellido_dos) AS "nombre", 
+    SUM(CASE 
+            WHEN t_incidencias.cn_id_estado != 10 
+            THEN t_incidencias.cn_duracion_gestion 
+            ELSE 0 
+        END) AS "horasPendientes",
+    SUM(CASE 
+            WHEN t_incidencias.cn_id_estado = 10 
+            THEN t_incidencias.cn_duracion_gestion 
+            ELSE 0 
+        END) AS "horasTerminadas",
+    t_categorias.ct_descripcion AS "descripcion"
+FROM 
+    t_usuario_x_incidencia 
+INNER JOIN 
+    t_incidencias ON t_usuario_x_incidencia.ct_codigo_incidencia = t_incidencias.ct_codigo_incidencia
+INNER JOIN 
+    t_usuarios ON t_usuarios.ct_cedula = t_usuario_x_incidencia.ct_cedula_usuario
+INNER JOIN 
+	t_categorias ON t_categorias.cn_id_categoria = t_incidencias.cn_id_categoria
+GROUP BY 
+	t_incidencias.cn_id_categoria;`
+    return result   
+        } catch (error) {
             return this.#response = false;
         }
     }

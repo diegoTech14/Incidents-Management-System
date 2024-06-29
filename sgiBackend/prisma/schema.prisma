@@ -20,7 +20,7 @@ model T_Imagenes {
   idDiagnostico Int?    @map("cn_id_diagnostico")
 
   idIncidencia String         @map("cn_id_incidencia")
-  incidencia   T_Incidencias  @relation(fields: [idIncidencia], references: [codigoIncidencia])
+  incidencia   t_incidencias  @relation(fields: [idIncidencia], references: [codigoIncidencia])
   diagnostico  T_Diagnostico? @relation(fields: [idDiagnostico], references: [codigoDiagnostico])
 }
 
@@ -31,6 +31,26 @@ model T_Roles {
   estado           Boolean            @map("cb_estado")
   usuarios         T_usuarios[]       @relation("T_Usuarios_x_Rol")
   T_Usuarios_x_Rol T_Usuarios_x_Rol[]
+}
+
+model T_Bitacora_General {
+  codigoBitacora Int    @id @unique @default(autoincrement()) @map("cn_codigo")
+  sistema        String @map("ct_sistema")
+  referencia     String @map("ct_referencia")
+
+  idUsuario String     @map("cn_id_usuario") @db.VarChar(11)
+  Usuario   T_usuarios @relation(fields: [idUsuario], references: [cedula])
+
+  idPantalla Int     @map("ct_codigo_pantalla")
+  Pantalla   T_Pantalla @relation(fields: [idPantalla], references: [codigoPantalla])
+}
+
+model T_Pantalla {
+  codigoPantalla Int    @id @unique @default(autoincrement()) @map("cn_codio_pantalla")
+  nombre         String @map("ct_nombre_pantalla")
+  descripcion    String @map("ct_descripcion_pantalla")
+
+  T_Bitacora_General T_Bitacora_General[]
 }
 
 model T_usuarios {
@@ -45,12 +65,13 @@ model T_usuarios {
   estado       Boolean @map("cb_estado")
   contrasena   String  @map("ct_contrasena")
 
-  incidencias              T_Incidencias[]
+  incidencias              t_incidencias[]
   roles                    T_Roles[]                  @relation("T_Usuarios_x_Rol")
   T_Usuarios_x_Rol         T_Usuarios_x_Rol[]
   diagnostico              T_Diagnostico[]
   usuario                  T_Usuario_X_Incidencia[]
   T_Bitacora_Cambio_Estado T_Bitacora_Cambio_Estado[]
+  T_Bitacora_General       T_Bitacora_General[]
 }
 
 model T_Usuario_X_Incidencia {
@@ -59,7 +80,7 @@ model T_Usuario_X_Incidencia {
   idIncidencia     String @map("ct_codigo_incidencia") @db.VarChar(12)
 
   usuario    T_usuarios    @relation(fields: [idUsuario], references: [cedula])
-  incidencia T_Incidencias @relation(fields: [idIncidencia], references: [codigoIncidencia])
+  incidencia t_incidencias @relation(fields: [idIncidencia], references: [codigoIncidencia])
 
   fechaAsignacion DateTime @map("cf_fecha_asignacion")
 }
@@ -72,8 +93,8 @@ model T_Pantallas {
 
 model T_Bitacora_Cambio_Estado {
   codigoBitacora   Int           @id @unique @default(autoincrement()) @map("cn_codig_bitacora")
-  idIncidencia     String        @map("ct_codigo_incidencia") @db.VarChar(8)
-  incidencias      T_Incidencias @relation(fields: [idIncidencia], references: [codigoIncidencia])
+  idIncidencia     String        @map("ct_codigo_incidencia") @db.VarChar(12)
+  incidencias      t_incidencias @relation(fields: [idIncidencia], references: [codigoIncidencia])
   fechaCambio      DateTime      @map("cf_fecha_cambio")
   idEstadoActual   Int           @map("cn_estado_actual")
   idEstadoAnterior Int           @map("cn_estado_anterior")
@@ -94,34 +115,34 @@ model T_Usuarios_x_Rol {
 model T_Afectaciones {
   id          Int             @id @unique @default(autoincrement()) @map("cn_id_afectacion")
   descripcion String          @map("ct_descripcion")
-  incidencias T_Incidencias[]
+  incidencias t_incidencias[]
 }
 
 model T_Categorias {
   id          Int             @id @unique @default(autoincrement()) @map("cn_id_categoria")
   descripcion String          @map("ct_descripcion")
-  incidencias T_Incidencias[]
+  incidencias t_incidencias[]
 }
 
 model T_Estados {
   id          Int             @id @unique @default(autoincrement()) @map("cn_id_estado")
   descripcion String          @map("ct_descripcion")
-  incidencias T_Incidencias[]
+  incidencias t_incidencias[]
 }
 
 model T_Riesgos {
   id          Int             @id @unique @default(autoincrement()) @map("cn_id_riesgo")
   descripcion String          @map("ct_descripcion")
-  incidencias T_Incidencias[]
+  incidencias t_incidencias[]
 }
 
 model T_Prioridades {
   id          Int             @id @unique @default(autoincrement()) @map("cn_id_prioridad")
   descripcion String          @map("ct_descripcion")
-  incidencias T_Incidencias[]
+  incidencias t_incidencias[]
 }
 
-model T_Incidencias {
+model t_incidencias {
   codigoIncidencia    String   @id @unique @map("ct_codigo_incidencia") @db.VarChar(11)
   nombre              String   @map("ct_nombre")
   descripcion         String   @map("ct_descripcion")
@@ -166,6 +187,6 @@ model T_Diagnostico {
   Usuario           T_usuarios @relation(fields: [idUsuario], references: [cedula])
 
   idIncidencia String        @map("ct_codigo_incidencia") @db.VarChar(11)
-  Incidencia   T_Incidencias @relation(fields: [idIncidencia], references: [codigoIncidencia])
+  Incidencia   t_incidencias @relation(fields: [idIncidencia], references: [codigoIncidencia])
   imagenes     T_Imagenes[]
 }

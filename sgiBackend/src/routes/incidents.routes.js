@@ -30,5 +30,10 @@ routerIncidents.put('/incidents/updateStatus/:codigoIncidencia', controller.upda
 routerIncidents.get('/incidents/byUser', controller.getIncidences);
 routerIncidents.get('/incidents/one', controller.getIncidence);
 routerIncidents.get('/incidents/all', controller.getAllIncidences);
-
+routerIncidents.get('/incidents/diagnose/one/:codigoDiagnostico', controller.getDiagnose);
+routerIncidents.get('/incidents/report', controller.getReport);
+routerIncidents.patch('/incidents/changeStatus/:codigoIncidencia', controller.updateStatus);
+routerIncidents.patch('/incidents/changeCost/:codigoIncidencia', controller.updateCost);
+routerIncidents.patch('/incidents/close/:codigoIncidencia', controller.updateClose);
+routerIncidents.post('/incidents/statusBinnacle/create', controller.saveStatusBinnacle);
 export default routerIncidents;

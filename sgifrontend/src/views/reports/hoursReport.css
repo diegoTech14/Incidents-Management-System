@@ -1,0 +1,23 @@
+#iconReport{
+    font-size:20px;
+    color:#0462D0;
+}
+
+#iconReportMain{
+    font-size:25px;
+    color:#0462D0;
+}
+
+#category{
+    background-color: rgba(71, 179, 55, 0.753);
+    color: white;
+    width: 120px;
+    padding: 5px;
+    border-radius: 15px;
+    font-weight: bold;
+}
+
+#iconDoc{
+    font-size:20px;
+    color:white;
+}
