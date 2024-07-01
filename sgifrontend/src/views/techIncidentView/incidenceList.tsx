@@ -33,6 +33,7 @@ const IncidencesList: React.FC<modalAssing> = ({ setOpenModal, signal, setOpenCo
 
     useEffect(() => {
         handleGetIncidences();
+        console.log(formData)
     }, [])
 
     return (

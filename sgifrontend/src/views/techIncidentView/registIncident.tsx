@@ -78,14 +78,7 @@ const RegistIncidents: React.FC = () => {
                         buttons={['Action']}
                         onDidDismiss={() => setIsOpen(false)}
                     ></IonAlert>
-                    <IonToast
-                        isOpen={isOpenTextError}
-                        onDidDismiss={() => setIsOpenTextError(false)}
-                        message="Algunos caracteres especiales no son permitidos"
-                        duration={3000}
-                        icon={closeCircleOutline}
-                        id="ion-toast-text"
-                    ></IonToast>
+
 
                     <div className='d-flex row justify-content-center mt-2 rounded m-1'>
                         <IonCard id="registCard" className='shadow-none'>

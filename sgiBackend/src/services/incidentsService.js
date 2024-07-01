@@ -6,7 +6,7 @@ export class IncidentsService {
     #response = false;
 
     async #generateIncidentCode() {
-        const lastIncident = await prisma.t_Incidencias.findFirst({
+        const lastIncident = await prisma.t_incidencias.findFirst({
             orderBy: {
                 fechaRegistro: 'desc'
             }
@@ -31,7 +31,7 @@ export class IncidentsService {
     }
 
     async lastDiagnoseId() {
-        const lastId = await prisma.t_Diagnostico.findFirst({
+        const lastId = await prisma.t_diagnostico.findFirst({
             orderBy: {
                 fechaDiagnostico: 'desc'
             }
@@ -41,7 +41,7 @@ export class IncidentsService {
 
     async createIncident(req) {
         try {
-            await prisma.t_Incidencias.create({
+            await prisma.t_incidencias.create({
                 data: {
                     ...req.body,
                     codigoIncidencia: await this.last(),
@@ -60,7 +60,7 @@ export class IncidentsService {
 
     async diagnoseIncidence(req) {
         try {
-            await prisma.t_Diagnostico.create({
+            await prisma.t_diagnostico.create({
                 data: {
                     ...req.body,
                     tiempoEstimado: parseInt(req.body.tiempoEstimado),
@@ -77,19 +77,34 @@ export class IncidentsService {
 
     async getIncidences(req) {
         try {
-            const incidences = await prisma.t_Incidencias.findMany(
-                {
-                    where: {
-                        idUsuario: req.query.idUsuario
-                    },
-                    select: {
-                        codigoIncidencia: true,
-                        nombre: true,
-                        Estado: true
-                    },
+            let incidences = []
+            if(req.query.idUsuario==""){
+                incidences = await prisma.t_incidencias.findMany(
+                    {
+                        where: {
+                            idUsuario: req.query.idUsuario
+                        },
+                        select: {
+                            codigoIncidencia: true,
+                            nombre: true,
+                            Estado: true
+                        },
+    
+                    }
+                );
+            }else{
+                incidences = await prisma.t_incidencias.findMany(
+                    {
+                        select: {
+                            codigoIncidencia: true,
+                            nombre: true,
+                            Estado: true
+                        },
+    
+                    }
+                );
+            }
 
-                }
-            );
             return incidences;
         } catch (error) {
             this.#response = false;
@@ -97,9 +112,10 @@ export class IncidentsService {
     }
 
     async getAllIncidences(req) {
+        
         try {
             let incidences = {};
-
+            
             if (req.query.rol == 2) {
                 incidences = await prisma.t_incidencias.findMany(
                     {
@@ -116,7 +132,8 @@ export class IncidentsService {
 
                     }
                 );
-            } else if (req.query.rol == 3) {
+            } else if (req.query.rol == 4) {
+                
                 incidences = await prisma.t_incidencias.findMany(
                     {
                         select: {
@@ -127,10 +144,9 @@ export class IncidentsService {
                     }
                 );
             }
-
+            console.log(incidences)
             return incidences;
         } catch (error) {
-            console.log(error)
             this.#response = false;
         }
     }
@@ -138,7 +154,7 @@ export class IncidentsService {
     async saveCreatedImages(req) {
         const lastId = await this.#generateIncidentCode();
         try {
-            await prisma.t_Imagenes.create(
+            await prisma.t_imagenes.create(
                 {
                     data: {
                         rutaImagen: `/images/${req.file.filename}`,
@@ -158,7 +174,7 @@ export class IncidentsService {
     async saveDiagnoseImages(req) {
         const lastId = await this.#generateIncidentCode();
         try {
-            await prisma.t_Imagenes.create(
+            await prisma.t_imagenes.create(
                 {
                     data: {
                         rutaImagen: `/images/${req.file.filename}`,
@@ -178,7 +194,7 @@ export class IncidentsService {
 
     async setIncidenceToTechnician(req) {
         try {
-            await prisma.t_Usuario_X_Incidencia.create(
+            await prisma.t_usuario_x_incidencia.create(
                 {
                     data: {
                         ...req.body,
@@ -188,7 +204,6 @@ export class IncidentsService {
             )
             this.#response = true;
         } catch (error) {
-            console.log(error)
             this.#response = false;
         }
         return this.#response;
@@ -196,7 +211,7 @@ export class IncidentsService {
 
     async getIncidence(req) {
         try {
-            const incidence = await prisma.t_Incidencias.findFirst(
+            const incidence = await prisma.t_incidencias.findFirst(
                 {
                     where: {
                         codigoIncidencia: req.query.idIncidence
@@ -228,7 +243,7 @@ export class IncidentsService {
     async updateCategoriesIncident(req) {
 
         try {
-            const updatedIncident = await prisma.t_Incidencias.update({
+            const updatedIncident = await prisma.t_incidencias.update({
                 where: {
                     codigoIncidencia: req.params.codigoIncidencia
                 },
@@ -248,7 +263,7 @@ export class IncidentsService {
 
     async gettingStatusFromIncidence(idIncidencia) {
         try {
-            const incidence = await prisma.t_Incidencias.findFirst(
+            const incidence = await prisma.t_incidencias.findFirst(
                 {
                     where: {
                         codigoIncidencia: idIncidencia
@@ -269,7 +284,7 @@ export class IncidentsService {
 
         try {
             console.log(object)
-            const newRecord = await prisma.t_Bitacora_Cambio_Estado.create(
+            const newRecord = await prisma.t_bitacora_cambio_estado.create(
                 {
                     data: {
                         ...object
@@ -289,7 +304,7 @@ export class IncidentsService {
     async changeStatusIncident(req) {
         try {
             const currentlyStatus = await this.gettingStatusFromIncidence(req.params.codigoIncidencia);
-            const updateIncident = await prisma.t_Incidencias.update({
+            const updateIncident = await prisma.t_incidencias.update({
                 where: {
                     codigoIncidencia: req.params.codigoIncidencia
                 },
@@ -314,7 +329,7 @@ export class IncidentsService {
 
     async closeIncidence(req) {
         try {
-            const updateIncident = await prisma.t_Incidencias.update({
+            const updateIncident = await prisma.t_incidencias.update({
                 where: {
                     codigoIncidencia: req.params.codigoIncidencia
                 },
@@ -331,7 +346,7 @@ export class IncidentsService {
 
     async getOneDiagnose(req) {
         try {
-            const diagnose = await prisma.t_Diagnostico.findFirst({
+            const diagnose = await prisma.t_diagnostico.findFirst({
                 where: {
                     codigoDiagnostico: parseInt(req.params.codigoDiagnostico)
                 }, select: {
@@ -353,7 +368,7 @@ export class IncidentsService {
 
     async setCost(req) {
         try {
-            const updateIncident = await prisma.t_Incidencias.update({
+            const updateIncident = await prisma.t_incidencias.update({
                 where: {
                     codigoIncidencia: req.params.codigoIncidencia
                 },
@@ -370,7 +385,7 @@ export class IncidentsService {
 
     async closeIncidence(req) {
         try {
-            const updateIncident = await prisma.t_Incidencias.update({
+            const updateIncident = await prisma.t_incidencias.update({
                 where: {
                     codigoIncidencia: req.params.codigoIncidencia
                 },

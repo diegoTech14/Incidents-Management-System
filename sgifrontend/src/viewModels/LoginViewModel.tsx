@@ -44,9 +44,9 @@ export function userLogin() {
           history.push("/supervisor")
         }else if(rol==5){
           history.push("/administrador")
-         
         }
-        console.log(rol)
+
+        localStorage.setItem('rol', rol.toString())
       }, 3000);
 
     } catch (error) {

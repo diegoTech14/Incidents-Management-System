@@ -14,7 +14,7 @@ export class UsersService {
 
     async #generateToken(userData) {
         const { cedula, nombre } = userData;
-        const rol = await prisma.t_Usuarios_x_Rol.findFirst(
+        const rol = await prisma.t_usuarios_x_rol.findFirst(
             {
                 where: {
                     userId: cedula
@@ -31,6 +31,7 @@ export class UsersService {
         return this.#userToken;
     }
 
+    
     async getUsers() {
         return await prisma.t_usuarios.findMany();
     }

@@ -28,7 +28,9 @@ export function IncidencesViewModel() {
 
         try {
             const query = await incidences.getIncidences((await AuthService.decodeToken()).cedula);
+            console.log(query)
             setFormData(query)
+            
         } catch (error) {
             setIsOpen(true);
         }

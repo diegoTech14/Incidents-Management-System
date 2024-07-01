@@ -4,6 +4,7 @@ export class IncidencesService {
     public async getIncidences(userDNI:string){
         try{
             const response = await axios.get(`http://localhost:3000/api/incidents/byUser?idUsuario=${userDNI}`);
+            console.log(response.data)
             return response.data;
 
         }catch(error:any){

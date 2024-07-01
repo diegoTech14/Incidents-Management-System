@@ -179,45 +179,7 @@ const OneIncidence: React.FC = () => {
                                     {/* metadata */}
                                     <hr />
                                     {/* long data */}
-                                    <div>
-                                        <div className='d-flex flex-column justify-content-start mt-2'>
-                                            <div className='text-dark fw-bold'>Descripción</div>
-                                            <div className='mb-2'>
-                                                <IonTextarea
-                                                    id="textarea"
-                                                    labelPlacement="floating"
-
-                                                    value="Lorem Ipsum dolor sit ammet sitter jetech"
-                                                    readonly={true}
-                                                    placeholder="Enter text"
-
-                                                ></IonTextarea>
-                                            </div>
-                                            <div className='text-dark fw-bold'>Justificación de cierre</div>
-                                            <div className='mb-2'>
-                                                <IonTextarea
-                                                    id="textarea"
-                                                    labelPlacement="floating"
-
-                                                    value="Lorem Ipsum dolor sit ammet sitter jetech"
-                                                    readonly={true}
-                                                    placeholder="Enter text"
-                                                ></IonTextarea>
-                                            </div>
-                                            <div className='text-dark fw-bold'>Observaciones</div>
-                                            <div className='mb-2'>
-                                                <IonTextarea
-                                                    id="textarea"
-                                                    labelPlacement="floating"
-
-                                                    readonly={true}
-                                                    value="Lorem Ipsum dolor sit ammet sitter jetech"
-                                                    placeholder="Enter text"
-                                                ></IonTextarea>
-                                            </div>
-                                        </div>
-                                    </div>
-
+  
                                     <IonLabel className='fw-bold'>
                                         Estado de la incidencia
                                     </IonLabel>
